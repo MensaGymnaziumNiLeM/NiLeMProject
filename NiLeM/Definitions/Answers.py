@@ -25,12 +25,17 @@ def not_found(self):
 def send_file(self):
     name = self.path[1:]
     file = open(name, "rb")
-    self.send_response(200)
     if ".jpg" in name:
+        self.send_response(200)
         self.send_header("Content-type", "image/jpeg")
     elif ".pdf" in name:
+        self.send_response(200)
         self.send_header("Content-type", "application/pdf")
+    elif (".py" in name) or (".db" in name):
+        self.not_found()
+        return
     else:
+        self.send_response(200)
         self.send_header("Content-type", "text/html")
     self.end_headers()
     self.wfile.write(file.read())
@@ -71,11 +76,10 @@ def subject_menu(self):
         "<body>"
         "<h1>" + Translations.subject_name(path[1].lower(), language.lower()) + "</h1>"
         "<div style=\"margin-right: 100px; margin-left: 100px;\">" + lessons + "</div>"
-        "<p><button onclick=\"window.location.href='../Core/Subjects"
-        + Translations.file_language(language.lower()) + ".html';\">"
-        "<p><img src=\"../Pictures/Back.jpg\" alt=\"Back\" class=\"image_big\"></p>"
-        "<h3>" + Translations.to_main(language.lower()) + "</h3>"
-        "</button></p>"
+        "<p><a href=\"../Core/Subjects"
+        + Translations.file_language(language.lower()) + ".html\">"
+        + Translations.to_main(language.lower())
+        + "</a></p>"
         "</body>"
         "</html>",
         "utf-8"))
